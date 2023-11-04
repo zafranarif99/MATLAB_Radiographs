@@ -9,6 +9,7 @@
 \usepackage{indentfirst}
 \usepackage{enumitem}
 \usepackage{verbatim}
+\graphicspath{ {./images/} }
 
 \title{Radiograph Project - Brain Slicing and Noise Reduction}
 \author{Zafran A. Arif}
@@ -30,7 +31,7 @@ The goal of this project is an analysis of the left-inverse process on the radio
     \item Repeat the instructions in Section 5.3 for downloading code and radiographic data B and for computing the corresponding radiographic transformation $T$. Verify that each radiograph contains M = 12960 pixels (120 views of 108 data points each). Verify that the transformation matrix $T : \mathbb{R}^{N} \to \mathbb{R}^{M}$ where $N = 11664$ corresponding to a brain slice image of 108 × 108 voxels in one slice.
     \item Compute the rank of $T$ and argue that $T$ in injective. Compute the left-inverse transformation $P = (T^TT)^{-1}T^T$. What is the rank of $P$? Is $P$ injective? surjective? Hint: You can answer this question without explicitly computing the rank of this large dense matrix.
     \item Compute a variety of brain slice reconstructions using the noiseless radiographs in the data array $B$. Observe that the reconstructions contain features that suggest that the reconstructions are flawed. Suggest one or more reasons why actual very-low-noise data is not exact and can therefore result in inexact reconstructions.
-    \item Consider the transformation equation $(T^TT)x = T^Tb$. Let $M = T^TT$. Show that $M$ is diagonalizable as $M = QDQ^{−1}$ with eigenvalues $\lambda_1 \ge \lambda_1 \ge ... \ge \lambda_N > 0$. What are the eigenvalues of $M^{−1}$? Hint: Matlab/octave command lambda=eig(A); returns the eigenvalues of a square matrix A relatively quickly.
+    \item Consider the transformation equation $(T^TT)x = T^Tb$. Let $M = T^TT$. Show that $M$ is diagonalizable as $M = QDQ^{-1}$ with eigenvalues $\lambda_1 \ge \lambda_1 \ge ... \ge \lambda_N > 0$. What are the eigenvalues of $M^{-1}$? Hint: Matlab/octave command lambda=eig(A); returns the eigenvalues of a square matrix A relatively quickly.
     \item Suppose a noisy radiograph vector is $\Bar{b} = b + \eta$ where $b$ is the noiseless radiograph and $\eta$ is a noise vector. Show, instead of computing or calculating, how the noise vector affects the brain slice reconstruction - that is, compare reconstructions using $b$ and also using $\Bar{b}$. Use any relevant previous results.
     \item Now, verify your result above by computing the noise levels in representative radiographs and also in corresponding brain slice reconstructions. Use the standard inner product norm for image spaces.
     \item Use these results to discuss how data noise can be amplified in the brain slice reconstruction process. Can you suggest a possible method for reducing this amplification effect?
@@ -96,6 +97,10 @@ Suppose the initial noisy radiograph equation $\Bar{b} = b + \eta$, multiply eac
 \end{equation}
 
 Notice that $\sigma_r$ is a number that is very close to zero. So, if we divide 1 by $\sigma_r$, we will get a very large number. This condition explained the large appearance amount of the noise in our radiograph. In other words, the noises are amplified in the brain reconstruction process. In order to reduce this amplification, we suggest to use a correction. However, the correction method will not give us the perfect answer in the first trial, hence we need to do correction multiple times so that we get the desired clean radiograph. By correction method, we meant enhancing the picture using the nullspace correction method which we found very accurate (we discussed this in class on Friday, December 9). Each iteration of correction will give us a better image result, then after several corrections, we will get an image that is close to the actual object.
+
+\subsection{Result}
+\includegraphics[height=16cm, width=12cm]{radiograph.png}\\
+We used left-inverse to remove the noise from the radiograph on the right to get the result on the left.
 
 \pagebreak
 \section{MATLAB Code}
