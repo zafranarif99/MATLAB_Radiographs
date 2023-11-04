@@ -1,0 +1,216 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{indentfirst}
+\usepackage{enumitem}
+\usepackage{verbatim}
+
+\title{Radiograph Project - Brain Slicing and Noise Reduction}
+\author{Zafran A. Arif}
+\date{Fall 2022}
+\parskip=1.5ex
+\oddsidemargin=0mm
+\textwidth=6.5in
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\pagebreak
+
+\section{Project Description and Guide}
+The goal of this project is an analysis of the left-inverse process on the radiographic data first explored in Section 5.3. In this project you will use the ideas of injectivity, left-inverse, digonalizability, eigenvalues, inner product, and norm. This project has a significant computational aspect, though complicated code development is not necessary. The following tasks should be completed along with a written report outlining your work and results. Some effort should be made to keep the report concise while still providing a full picture of the work focusing on linear algebra concepts.
+
+\begin{enumerate}[noitemsep,nolistsep]
+    \item Repeat the instructions in Section 5.3 for downloading code and radiographic data B and for computing the corresponding radiographic transformation $T$. Verify that each radiograph contains M = 12960 pixels (120 views of 108 data points each). Verify that the transformation matrix $T : \mathbb{R}^{N} \to \mathbb{R}^{M}$ where $N = 11664$ corresponding to a brain slice image of 108 × 108 voxels in one slice.
+    \item Compute the rank of $T$ and argue that $T$ in injective. Compute the left-inverse transformation $P = (T^TT)^{-1}T^T$. What is the rank of $P$? Is $P$ injective? surjective? Hint: You can answer this question without explicitly computing the rank of this large dense matrix.
+    \item Compute a variety of brain slice reconstructions using the noiseless radiographs in the data array $B$. Observe that the reconstructions contain features that suggest that the reconstructions are flawed. Suggest one or more reasons why actual very-low-noise data is not exact and can therefore result in inexact reconstructions.
+    \item Consider the transformation equation $(T^TT)x = T^Tb$. Let $M = T^TT$. Show that $M$ is diagonalizable as $M = QDQ^{−1}$ with eigenvalues $\lambda_1 \ge \lambda_1 \ge ... \ge \lambda_N > 0$. What are the eigenvalues of $M^{−1}$? Hint: Matlab/octave command lambda=eig(A); returns the eigenvalues of a square matrix A relatively quickly.
+    \item Suppose a noisy radiograph vector is $\Bar{b} = b + \eta$ where $b$ is the noiseless radiograph and $\eta$ is a noise vector. Show, instead of computing or calculating, how the noise vector affects the brain slice reconstruction - that is, compare reconstructions using $b$ and also using $\Bar{b}$. Use any relevant previous results.
+    \item Now, verify your result above by computing the noise levels in representative radiographs and also in corresponding brain slice reconstructions. Use the standard inner product norm for image spaces.
+    \item Use these results to discuss how data noise can be amplified in the brain slice reconstruction process. Can you suggest a possible method for reducing this amplification effect?
+\end{enumerate}
+\pagebreak
+\section{Discussion}
+The discussion below doesn't reflect the whole work. Please refer to the MATLAB Code in \textbf{Section 3. MATLAB Code} for further details.
+
+Credits to \textbf{Zach, Blake, Hideki, and Grace}. These are the people in our study group that I'm very grateful to have. They helped me throughout the semester, especially towards the end of the semester, to learn and understand the materials and concepts of Linear Algebra. I did this project alongside them and we had a very productive discussion on December 3, 2022 that helped us to finish this extra credit project.
+\subsection{First Question}
+Please refer to the code. We verified M and N.
+\subsection{Second Question}
+Let $P = (T^TT)^{-1}T^T$ as the left inverse transformation and $rank(P)$ as the rank of $P$. By Thm 5.1.21, $T$ is injective since we can find the $Null(T)$ which is just an empty set. $rank(P)$ gives us a number 11664 which is equal to $N$ or the dimension of $V$. Since $rank(P)$ is equal to $dim(V)$, we know that $P$ has 11664 linearly independent vectors. Therefore, $P$ must be surjective.
+
+\subsection{Third Question}
+There’s no such thing as the perfect/precise sensor or tool to collect a noiseless data. Even with the best radiography equipment that we have today, we still encounter some noises in our data. Thus, it's impossible to get an exact reconstruction.
+
+\subsection{Fourth Question}
+Notice that in the radiographs, the noises are present and they were bad for our radiograph. These noises are not just in the noisy radiograph, they also appear in the noiseless reconstruction as well. This might happen because if we read an object using a sensor, we will catch some unwanted data outside of the object, thus noisy radiograph. We think that there are several possible sources of data noise. Namely, Immage Scattering, Dust (or some random particles), Defective Sensors, and several errors from the computations.
+
+\subsection{Fifth Question}
+The eigenvalues of $M^{-1}$ is to large to be written in the report. Please refer to the code and run it to find the eigenvalues.
+
+\subsection{Sixth Question}
+Let $\Bar{b} = b + \eta$, where $\Bar{b}$ is the Noisy Radiograph, $b$ is the Perfect Radiograph and $\eta$ is the Noise found in Radiograph. Let $M = QDQ^T$, then inverse of $M$ is $M^{-1}$ $= QD^{-1}Q^T$. We have
+\begin{equation}
+    \begin{aligned}
+    M^{-1} \cdot \Bar{b} &= M^{-1}\cdot(b + \eta)\\
+                  &= M^{-1}_b + M^{-1}_\eta\\ \nonumber
+                  &= (QD^{-1}Q^T)_b+(QD^{-1}Q^T)_\eta    
+    \end{aligned}
+\end{equation}
+From class, we know that $x = (QD^{-1}Q^T)_b$. Let $x'=M^{-1}_\Bar{b}$ and $x_\eta = (QD^{-1}D^T)_\eta$, hence
+\begin{equation}
+    \begin{aligned}
+    M^{-1}_\Bar{b} &= (QD^{-1}Q^T)_b+(QD^{-1}Q^T)_\eta\\
+                 x' &= x + x_\eta
+    \end{aligned}
+\end{equation}
+
+\subsection{Seventh Question}
+Referring to the code. Here is the result when using the Slices: 45, 90, 135.
+\begin{itemize}[noitemsep,nolistsep]
+    \item Noise in the Radiograph: 11664x1 double data
+    \item Noise Magnitude: 6.2522e+03
+    \item Clean Radiograph Magnitude: 8.7171e+03
+    \item The difference (Clean Rad. Magnitude - Noise Magnitude):  2.4648e+03
+\end{itemize}
+\pagebreak
+\subsection{Eighth Question}
+Referring to the result in the \textbf{Subsection 2.6. Sixth Question}, we have $x' &= x + x_\eta$. Now, let's introduce a pseudo-inverse $P$ where it's the sum of the matrix $V_k$ times the transpose of matrix $U_k$ divided by the eigenvalues in the diagonal matrix $\Sigma$. Thus,
+\[P = \sum_{k=1}^{r} \frac{V_k U_k^T}{\sigma_k}\]
+and
+\[P_b = \frac{1}{\sigma_1}<u_1,b>v_1+...+\frac{1}{\sigma_r}<u_r,b>v_r = x\]
+
+Suppose the initial noisy radiograph equation $\Bar{b} = b + \eta$, multiply each sides by $P$, then
+\begin{equation}
+    \begin{aligned}
+        P(\Bar{b}) &=P(b+\eta)\\
+                    &= P_b + P_\eta\\ \nonumber
+                    &= x+\frac{1}{\sigma_1}<u_1,\eta>v_1+...+\frac{1}{\sigma_r}<u_r,\eta>v_r
+    \end{aligned}
+\end{equation}
+
+Notice that $\sigma_r$ is a number that is very close to zero. So, if we divide 1 by $\sigma_r$, we will get a very large number. This condition explained the large appearance amount of the noise in our radiograph. In other words, the noises are amplified in the brain reconstruction process. In order to reduce this amplification, we suggest to use a correction. However, the correction method will not give us the perfect answer in the first trial, hence we need to do correction multiple times so that we get the desired clean radiograph. By correction method, we meant enhancing the picture using the nullspace correction method which we found very accurate (we discussed this in class on Friday, December 9). Each iteration of correction will give us a better image result, then after several corrections, we will get an image that is close to the actual object.
+
+\pagebreak
+\section{MATLAB Code}
+\begin{verbatim}
+%% Radiographs
+load Lab5Radiographs.mat
+n = 108;
+m = 108;
+th = linspace(1,179,120); % 1 deg to 179 deg, 120 different views
+ScaleFac = 1;
+T = tomomap(n,m,th,ScaleFac);
+T = full(T);
+
+%% Slices
+X = (T'*T)\(T'*B); % array of radiograph constructions
+ShowSlices; 
+
+%% First Question
+a = length(th); % number or angles taken in radiograph transformation
+M = m*a; % verify M = m*a = 12960
+N = n*n; % verify N = 108*108
+
+%% Second Question
+P = inv(T'*T)*T'; % left inverse transformation
+rankP = rank(P); % rank of P
+
+% By Thm 5.1.21, T is injective since we can find the null(T) which is just
+% an empty set.
+
+% rank(P) gives us a number 11664 which is equal to N or the dimension of V.
+% Since rank(P) is equal to dim(V), we know that P has 11664 linearly
+% independent vectors. Thus P must be surjective.
+
+%% Third Question
+ShowSlices; % showing the specific slices of the brain
+% There's no such thing as the perfect/precise sensor or tool to collect a
+% noiseless data. Even with the best radiography equipment that we have today, 
+% we still encounter some noises in our data. 
+
+% Thus, it's impossible to get an exact reconstructions.
+
+%% Fourth Question
+% Notice that in the radiographs, the noises are present and they were bad for our
+% radiograph. These noises are not just in the noisy radiograph, they also
+% appear in the noiseless reconstruction as well. This might happen because
+% if we read an object using a sensor, we will catch some unwanted data
+% outside of the object, thus noisy radiograph.
+
+% We think that there are several possible sources of data noise. Namely,
+% Immage Scattering, Dust (or some random particles), Defective Sensors,
+% and several errors from the computations.
+
+%% Fifth Question
+MatrixA = T'*T; % matrix of T transpose * T (symmetric, diagonalizable by Thm 7.3.12)
+[V,D] = eig(MatrixA); % the eigenvalues V and diagonal D
+invMatrixA = inv(MatrixA); % Matrix A inverse
+eiginvMatrixA = eig(invMatrixA); % the eigenvalues of the inverse of Matrix A
+
+%% Sixth Question
+% Let bNoisy = bPerfect + noise, 
+% where bNoisy is the Noisy Radiograph, bPerfect is the Perfect Radiograph 
+% and noise is the Noise found in Radiograph.
+
+% Let M = Q*D*Q', then inverse of M is invM = Q*invD*Q'
+
+% invM * bNoisy = invM*(bPerfect + noise)
+%               = invM*bPerfect + invM*noise
+%               = (Q*invD*Q')*(bPerfect)+(Q*inv(D)*Q')*(noise)
+
+% From class, we know that Q*invD*Q' = x, thus
+% invM * bNoisy = (Q*invD*Q')*(bPerfect)+(Q*inv(D)*Q')*(noise)
+%               = x + (Q*inv(D)*Q')*(noise)
+%
+% Let xNoise = (Q*inv(D)*Q')*(noise), hence
+% invM*bNoisy = x + xNoise
+
+%% Seventh Question
+i = 50;
+noiseRad = X(:,i+181) - X(:,i); % 50th noisy rad - 50th noiseless rad
+normNoise = norm(noiseRad); % magnitude of noise vector k, kth slice
+normClean = norm(X(:,i)); % magnitude of clean rad
+noiseMatters = normClean - normNoise; % magnitude of noise and clean radiography difference
+
+% Slices: 45, 90, 135
+% Noise in the Radiograph: 11664x1 double data
+% Noise Magnitude: 6.2522e+03
+% Clean Radiograph Magnitude: 8.7171e+03
+
+% The difference (Clean Rad. Magnitude - Noise Magnitude):  2.4648e+03
+
+
+
+
+%% Eighth Question
+% Let pseudo-inverse P = sum(VkUk'/sigmak)
+% Let Pb = 1/sigma1 * <u1,b>*v1 + ... + 1/sigmar*<ur,b>*vr
+
+% Suppose the initial radiograph transformation, multiply both sides by P
+% P(bNoisy) =P(bPerfect+noise)
+%            = P_bPerfect + P_noise
+%            = x + (1/sigma1 * <u1,eta>*v1 + ... + 1/sigmar*<ur,eta>*vr)
+
+% Notice that sigmar is a number that is very close to zero. 
+% So, if we divide 1 by $\sigma_r$, we will get a very large number. 
+% This condition explained the large appearance amount of the noise in our radiograph. 
+% In other words, the noises are amplified in the brain reconstruction process. 
+% In order to reduce this amplification, we suggest to use a correction. 
+% However, the correction method will not give us the perfect answer in the first trial, 
+% hence we need to do correction multiple times so that we get the desired clean radiograph. 
+% 
+% By correction method, we meant enhancing the picture using the nullspace correction method 
+% which we found very accurate (we discussed this in class on Friday, December 9). 
+% Each iteration of correction will give us a better image result, 
+% then after several corrections, we will get an image that is close to the actual object.
+
+\end{verbatim}
+
+\end{document}
