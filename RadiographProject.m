@@ -8,8 +8,8 @@
 % All of the problems will be answered through MATLAB comments and will be
 % explained in the PDF document report.
 
-% Credits to Zach, Blake, Hideki, and Grace. These are the people in our
-% study group.
+% Credits to Dr. Asaki, Zach, Blake, Hideki, and Grace. 
+% These were the people in our study group and Dr. Asaki was our Professor.
 %% Radiographs
 % This particular section was given by Zach but the other sections were
 % originally written by myself.
